@@ -466,7 +466,7 @@ def load_internvl_state(device="cuda"):
     model_path = "OpenGVLab/InternVL2_5-1B" 
     model_name = model_path
     config = AutoConfig.from_pretrained(model_path, trust_remote_code=True)
-    config.patch_size = 14
+    
     model = AutoModel.from_pretrained(
         model_path,
         torch_dtype=torch.float16,
