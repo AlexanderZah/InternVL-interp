@@ -1,0 +1,1 @@
+# Реализация метода интерпретации InternVL 2.5 с помощью метода vl-interp https://github.com/nickjiang2378/vl-interp
