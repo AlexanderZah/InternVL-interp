@@ -1,7 +1,7 @@
 from PIL import Image
 import torch
 from transformers import GenerationConfig, TopKLogitsWarper, LogitsProcessorList, AutoModel, AutoTokenizer, AutoConfig
-from src.caption.internvl import get_conv_template
+from src.caption.internvl.conversation import get_conv_template
 import torch
 import torchvision.transforms as T
 from torchvision.transforms.functional import InterpolationMode
