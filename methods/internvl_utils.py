@@ -283,12 +283,12 @@ def retrieve_logit_lens_internvl(state, img_path, num_patches, text_prompt=None)
         hidden_states=True,
         num_patches=num_patches
     )
-    
+
     # Декодирование выходных последовательностей
     output_ids = output.sequences
     caption = tokenizer.batch_decode(output_ids, skip_special_tokens=True)[0].strip()
     print(f"Caption: {caption}")
-
+    return caption, None
     # Находим индекс токена <IMG_CONTEXT> для выделения токенов изображения
     img_context_token_id = tokenizer.convert_tokens_to_ids(IMG_CONTEXT_TOKEN)
     input_ids_list = input_ids[0].tolist()  # Берем первый элемент батча
@@ -308,7 +308,7 @@ def retrieve_logit_lens_internvl(state, img_path, num_patches, text_prompt=None)
     # Обработка скрытых состояний
     hidden_states = output.hidden_states[0]  # Кортеж тензоров для первого шага
     hidden_states = torch.stack(hidden_states)  # Shape: (num_layers, batch_size, seq_len, hidden_size)
-
+    
     logits_warper = TopKLogitsWarper(top_k=50, filter_value=float("-inf"))
     logits_processor = LogitsProcessorList([])
     with torch.inference_mode():
@@ -452,7 +452,7 @@ def get_caption_from_internvl(
     return new_caption
 
 
-def load_internvl_state(device="cuda"):
+def load_internvl_state(device="cuda", model_name=None):
     """
     Load the state for InternVL2_5-1B model, including model, tokenizer, and helper functions.
 
@@ -463,20 +463,21 @@ def load_internvl_state(device="cuda"):
         dict: State containing model, tokenizer, vocabulary, embeddings, and helper functions.
     """
     # Загрузка модели и токенизатора
-    model_path = "OpenGVLab/InternVL2_5-1B" 
-    model_name = model_path
-    config = AutoConfig.from_pretrained(model_path, trust_remote_code=True)
-    
+    if model_name is None:
+        model_name = "OpenGVLab/InternVL2_5-1B"
+
+    config = AutoConfig.from_pretrained(model_name, trust_remote_code=True)
+
     model = AutoModel.from_pretrained(
-        model_path,
+        model_name,
         torch_dtype=torch.float16,
         low_cpu_mem_usage=True,
         trust_remote_code=True,
         load_in_4bit=True,
         config=config
     ).eval().to(device)
-    
-    tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
+
+    tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
     model.img_context_token_id = tokenizer.convert_tokens_to_ids(IMG_CONTEXT_TOKEN)
     # Получение словаря и эмбеддингов
     vocabulary = tokenizer.get_vocab()
