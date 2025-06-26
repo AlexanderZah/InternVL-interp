@@ -469,7 +469,11 @@ def load_internvl_state(device="cuda", model_name=None):
         model_name = "OpenGVLab/InternVL2_5-1B"
 
     config = AutoConfig.from_pretrained(model_name, trust_remote_code=True)
-
+    config.llm_config.do_sample = True
+    config.llm_config.temperature = 0.5
+    config.vision_config.do_sample = True
+    config.vision_config.temperature = 0.5
+    
     model = AutoModel.from_pretrained(
         model_name,
         torch_dtype=torch.float16,
