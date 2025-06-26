@@ -182,6 +182,7 @@ def run_internvl_model(
     text_prompt=None,
     hidden_states=False,
     num_patches=1,
+    temperature=1.0
     
 ):
     """
@@ -216,7 +217,7 @@ def run_internvl_model(
 
     # Настраиваем параметры генерации
     generation_config = GenerationConfig(
-        temperature=1.0,
+        temperature=temperature,
         num_beams=1,
         max_new_tokens=512,
         eos_token_id=eos_token_id,
@@ -248,7 +249,7 @@ def run_internvl_model(
     return outputs
 
 
-def retrieve_logit_lens_internvl(state, img_path, num_patches, text_prompt=None):
+def retrieve_logit_lens_internvl(state, img_path, num_patches, text_prompt=None, temperature=1.0):
     """
     Retrieve caption and softmax probabilities for image tokens from InternVL2_5-1B.
 
@@ -281,7 +282,8 @@ def retrieve_logit_lens_internvl(state, img_path, num_patches, text_prompt=None)
         state["tokenizer"],
         text_prompt=text_prompt,
         hidden_states=True,
-        num_patches=num_patches
+        num_patches=num_patches,
+        temperature=temperature
     )
 
     # Декодирование выходных последовательностей
