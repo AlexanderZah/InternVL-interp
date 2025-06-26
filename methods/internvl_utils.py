@@ -290,7 +290,7 @@ def retrieve_logit_lens_internvl(state, img_path, num_patches, text_prompt=None,
     output_ids = output.sequences
     caption = tokenizer.batch_decode(output_ids, skip_special_tokens=True)[0].strip()
     print(f"Caption: {caption}")
-    
+    return caption, None
     # Находим индекс токена <IMG_CONTEXT> для выделения токенов изображения
     img_context_token_id = tokenizer.convert_tokens_to_ids(IMG_CONTEXT_TOKEN)
     input_ids_list = input_ids[0].tolist()  # Берем первый элемент батча
