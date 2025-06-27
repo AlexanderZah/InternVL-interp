@@ -1,6 +1,7 @@
 bitsandbytes
 transformers
 torch
-torchvission
+torchvision
 numpy
 matplitlib
+pillow
