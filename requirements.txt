@@ -1,7 +1,1 @@
 bitsandbytes
-transformers
-torch
-torchvision
-numpy
-matplotlib
-pillow
