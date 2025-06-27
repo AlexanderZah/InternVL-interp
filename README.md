@@ -9,7 +9,7 @@ cd InternVL-interp
 ### Environment
 ```
 python version >= 3.9
-pip install -r requirements.txt
+pip install -r requirements_for_kaggle.txt
 ```
 ### Demos
 ```
